@@ -1,0 +1,57 @@
+<launch>
+  <!-- ************************************************************** -->
+  <!--     ROSLAUNCH FILE    (http://wiki.ros.org/roslaunch/)         -->
+  <!--                                                                -->
+  <!-- Launch files automate launching ROS nodes, services, etc.      -->
+  <!-- Recommended to prepare one .launch file for each node provided -->
+  <!-- by the package (passing it some set of default parameters) and -->
+  <!-- possibly a higher-level launch file which includes multiple    -->
+  <!-- lower-level launch files                                       -->
+  <!--                                                                -->
+  <!--     COMMAND-LINE USAGE:                                        -->
+  <!-- roslaunch PACKAGE_NAME LAUNCHFILE.launch arg1:=val1 arg2:=val2 -->
+  <!-- ************************************************************** -->
+
+  <!-- Local constants: -->
+  <!-- arg name="NAME"  value="CONSTANTVALUE" -->
+  <arg name="DEFAULT_TOPIC" value="example_topic" />
+
+  <!-- Required arguments: -->
+  <!-- arg name="NAME" -->
+
+  <!-- Optional arguments: -->
+  <!-- arg name="NAME"  default="VALUE" -->
+  <arg name="sub"             default="subscriber_node" />
+  <arg name="pub"             default="publisher_node" />
+  <arg name="namespace"       default="/example_nodes" />
+  <arg name="param_namespace" default="/example_nodes" />
+  <arg name="remapped_topic"  default="$(arg DEFAULT_TOPIC)" />
+  <arg name="config"          default="$(find template_rospy_pkg)/config/example_nodes.yaml" />
+
+  <!-- Start multiple launch files in the same namespace -->
+  <group ns="$(arg namespace)">
+
+    <!-- The messages to the default topic will be rerouted to the new topic -->
+    <remap from="$(arg DEFAULT_TOPIC)" to="$(arg remapped_topic)" />
+
+    <!-- Launch example_subscriber node-->
+    <include file="$(find template_rospy_pkg)/launch/generic_node.launch">
+      <arg name="package" value="template_rospy_pkg" />
+      <arg name="exec"    value="example_subscriber" />
+      <arg name="name"    value="$(arg sub)" />
+      <arg name="param_namespace" value="$(arg param_namespace)" />
+      <arg name="config"  value="$(arg config)" />
+    </include>
+
+    <!-- Launch example_publisher node-->
+    <include file="$(find template_rospy_pkg)/launch/generic_node.launch">
+      <arg name="package" value="template_rospy_pkg" />
+      <arg name="exec"    value="example_publisher" />
+      <arg name="name"    value="$(arg pub)" />
+      <arg name="param_namespace" value="$(arg param_namespace)" />
+      <arg name="config"  value="$(arg config)" />
+    </include>
+
+  </group>
+
+</launch>

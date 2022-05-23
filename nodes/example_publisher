@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+from template_rospy_pkg.example_publisher import ExamplePublisher
+from template_rospy_pkg.util import config_utils
+
+
+def debug(ros_args, user_args):
+    print("\n\nROSLAUNCH ARGUMENTS:")
+    print("ros_args:")
+    print(ros_args)
+    print("user_args:")
+    print(user_args)
+
+
+if __name__ == '__main__':
+    ros_args, user_args = config_utils.parse_args()
+
+    # debug(ros_args, user_args)
+
+    node = ExamplePublisher(ros_args["__name"],
+                            ros_args["__param_namespace"],
+                            ros_args["__package_path"],
+                            ros_args["__clear_params"] )
+

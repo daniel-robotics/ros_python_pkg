@@ -1,0 +1,48 @@
+<launch>
+
+  <!-- Required arguments: -->
+  <!-- arg name="NAME" -->
+  <arg name="package" />
+  <arg name="exec" />
+  
+  <!-- Local constants: -->
+  <!-- arg name="NAME"  value="CONSTANTVALUE" -->
+  <arg name="package_path"    value="$(eval find(arg('package')))" />
+
+  <!-- Optional arguments: -->
+  <!-- arg name="NAME"  default="VALUE" -->
+  <arg name="name"            default="$(arg exec)" />
+  <arg name="config"          default="$(arg package_path)/config/$(arg exec).yaml" />
+  <arg name="param_namespace" default="~" />
+  <arg name="machine"         default="" />
+  <arg name="respawn"         default="false" />
+  <arg name="respawn_delay"   default="30" />
+  <arg name="required"        default="false" />
+  <arg name="output"          default="screen" />
+  <arg name="launch-prefix"   default="" />
+  <arg name="override_params" default="" />
+
+  <!-- Load the parameters into external namespace if '~' (local private namespace) was not specified -->
+  <rosparam if="$(eval param_namespace != '~')" command="load" file="$(arg config)" ns="$(arg param_namespace)" />
+
+  <!-- clearparams='true' if params are in the node's local private ('~') namespace -->
+  <arg if="$(eval param_namespace == '~')" name="clear_params" value="true" />
+  <arg if="$(eval param_namespace != '~')" name="clear_params" value="false" />
+  
+  <!-- Start node without modified namespace -->
+  <node
+    name="$(arg name)"
+    pkg="$(arg package)"
+    type="$(arg exec)"
+    machine="$(arg machine)"
+    respawn="$(arg respawn)"
+    respawn_delay="$(arg respawn_delay)"
+    required="$(arg required)"
+    clear_params="$(arg clear_params)"
+    output="$(arg output)"
+    launch-prefix="$(arg launch-prefix)"
+    args="__param_namespace:=$(arg param_namespace) __package_path:=$(arg package_path) __clear_params:=$(arg clear_params) $(arg override_params)" >
+    <rosparam if="$(eval param_namespace == '~')" command="load" file="$(arg config)"  />
+  </node>
+
+</launch>
