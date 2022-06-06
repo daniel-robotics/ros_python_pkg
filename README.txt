@@ -1,4 +1,5 @@
-Catkin package file structure:
+Basic structure of a Catkin package for a ROSPY node:
+
 
 template_rospy_pkg/     # Root folder defines name of Catkin package
 |   launch/                 # Launch folder holds .launch files, each of which starts one or more ROS node.
