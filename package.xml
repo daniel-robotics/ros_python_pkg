@@ -1,25 +1,28 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>template_rospy_pkg</name>
+  <!-- EDIT: Package name, version description -->
+  <name>ros_python_pkg</name>
   <version>0.0.0</version>
-  <description>The template_rospy_pkg package</description>
+  <description>The ros_python_pkg package</description>
 
+  <!-- EDIT: Maintainer and author's name and email -->
   <maintainer email="daniel.kennedy.m1@gmail.com">Daniel Kennedy</maintainer>
-
-  <license>TODO</license>
-
   <author email="daniel.kennedy.m1@gmail.com">Daniel Kennedy</author>
 
+  <!-- EDIT: License -->
+  <license>GNU General Public License Version 3</license>
+
+  <!-- Required for all packages -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <!-- Add/change depend tags to specify what this package depends on. -->
+  <!-- Required for all Python packages -->
+  <depend>rospy</depend>
+
+  <!-- EDIT: Add/change depend tags to specify what this package depends on. -->
   <!-- Valid keys are any Catkin packages in this workspace's src/ directory, -->
   <!-- any installed ROS package, or any ROS-recognized system dependency -->
   <!-- (see this link for the current list: https://github.com/ros/rosdistro/blob/master/rosdep/base.yaml)-->
-  <depend>rospy</depend>
   <depend>std_msgs</depend>
-  <depend>template_msg_pkg</depend>
-
 
   <export>
   </export>

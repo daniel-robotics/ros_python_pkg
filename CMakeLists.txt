@@ -7,7 +7,6 @@ project(template_rospy_pkg)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
-  template_msg_pkg
 )
 
 catkin_python_setup()
