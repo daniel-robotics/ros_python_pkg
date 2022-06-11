@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 
 # EDIT: name of package
-project(template_rospy_pkg)
+project(ros_python_pkg)
 
 # EDIT: list all <build_depend> and <depend> package dependencies
 find_package(catkin REQUIRED COMPONENTS

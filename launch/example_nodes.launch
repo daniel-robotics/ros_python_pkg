@@ -26,7 +26,7 @@
   <arg name="namespace"       default="/example_nodes" />
   <arg name="param_namespace" default="/example_nodes" />
   <arg name="remapped_topic"  default="$(arg DEFAULT_TOPIC)" />
-  <arg name="config"          default="$(find template_rospy_pkg)/config/example_nodes.yaml" />
+  <arg name="config"          default="$(find ros_python_pkg)/config/example_nodes.yaml" />
 
   <!-- Start multiple launch files in the same namespace -->
   <group ns="$(arg namespace)">
@@ -35,8 +35,8 @@
     <remap from="$(arg DEFAULT_TOPIC)" to="$(arg remapped_topic)" />
 
     <!-- Launch example_subscriber node-->
-    <include file="$(find template_rospy_pkg)/launch/generic_node.launch">
-      <arg name="package" value="template_rospy_pkg" />
+    <include file="$(find ros_python_pkg)/launch/generic_node.launch">
+      <arg name="package" value="ros_python_pkg" />
       <arg name="exec"    value="example_subscriber" />
       <arg name="name"    value="$(arg sub)" />
       <arg name="param_namespace" value="$(arg param_namespace)" />
@@ -44,8 +44,8 @@
     </include>
 
     <!-- Launch example_publisher node-->
-    <include file="$(find template_rospy_pkg)/launch/generic_node.launch">
-      <arg name="package" value="template_rospy_pkg" />
+    <include file="$(find ros_python_pkg)/launch/generic_node.launch">
+      <arg name="package" value="ros_python_pkg" />
       <arg name="exec"    value="example_publisher" />
       <arg name="name"    value="$(arg pub)" />
       <arg name="param_namespace" value="$(arg param_namespace)" />
