@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+
+from ros_python_pkg.util import config_utils
+
+PACKAGE_NAME = "template_rospy_pkg"
+
+if __name__ == '__main__':
+    pkg_path = config_utils.get_package_path(PACKAGE_NAME)
+    print("Path to package %s: %s" % (PACKAGE_NAME, pkg_path))
+
