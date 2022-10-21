@@ -17,10 +17,10 @@ ros_python_pkg/     # Root folder defines the name of a Catkin package
 |   |   example_nodes.launch    # Launches example_publisher and example_subscriber by importing generic_node.launch
 |   |   generic_node.launch     # Launches a node using a variety of configuration options
 |   |
-|   nodes/                  # Nodes folder holds executable python files which require ROS
+|   nodes/                  # Nodes folder holds executable python files which "bootstrap" a ROS node.
 |   |
-|   |   example_publisher       # Python script (no .py file extension) which starts a ROS node (ExamplePublisher).
-|   |   example_subscriber      # Python script (no .py file extension) which starts a ROS node (ExampleSubscriber).
+|   |   example_publisher       # Python script (no .py file extension) which instanciates a ROS node (ExamplePublisher).
+|   |   example_subscriber      # Python script (no .py file extension) which instanciates a ROS node (ExampleSubscriber).
 |   |
 |   scripts/                # Scripts folder holds executable scripts for non-ROS functionality.
 |   |
@@ -77,19 +77,46 @@ Two nodes are launched:
         Publishes values at the rate set by the "rate" parameter to the "example_topic" topic.
  - Subscriber (src/ros_python_pkg/examples/example_subscriber.py):
         Subscribes to "example_topic" and prints values as they become available.
-
+In a separate console, inspect the nodes and their namespaces, topics, parameters using:
+```
+rosrun rqt rqt
+```
+    
 Under the hood, the following sequence of events unfolds when you run "roslaunch":
 1. Top-level launch file is located and run (launch/example_nodes.launch).
-2. **example_nodes.launch** creates a namespace for the two nodes and their parameters
-3. **example_nodes.launch** <include>s **generic_node.launch** twice, once for each node.
-4. Each time it is invoked, **generic_node.launch** loads a config file (config/example_nodes.yaml) into the ROS parameter server the namespace (example_nodes/), then starts a node using its *bootstrapping script* (nodes/example_publisher, nodes/example_subscriber).
-5. The bootstrapping script (finally!) instanciates a new instance of the node (src/ros_python_pkg/examples/example_publisher.py).
+2. **example_nodes.launch** creates a namespace for the two nodes and their parameters (/example_nodes)
+3. **example_nodes.launch** invokes **generic_node.launch** twice, once for each node.
+4. **generic_node.launch** loads a config file (config/example_nodes.yaml) into the ROS parameter server the namespace (example_nodes/), then starts a node using its "bootstrapping script" (nodes/example_publisher, nodes/example_subscriber).
+5. The bootstrapping script (nodes/example_publisher) creates a new instance of the node (src/ros_python_pkg/examples/example_publisher.py).
 
     
 ## Creating a new ROS node with rospy
+    
 Rospy is the python package providing most of the ROS API for Python programs.
 
-## Launching the ROS node
-
-Copy launch/example_nodes.launch
+## Creating the new launch configuration
+    
+Launching NewNode requires three things:  
+  - A "bootstrapping" Python script under nodes/, which creates a new instance of NewNode  
+  - A .yaml file under config/, which specifies parameters for the node  
+  - A .launch file under launch/, which invokes generic_node.launch with the name of the bootstrapping script and config file.  
+    
+1. Copy "nodes/example_publisher"  to  "nodes/new_node".  
+    Edit, replacing ExamplePublisher with the new node's class name and import path.  
+    
+2. Copy "config/example_nodes.yaml"  to  "config/new_node.yaml".  
+    Edit, replacing with whatever parameters the node requires.  
+    Currently, the following two parameters are expected, at a minimum:
+    ```
+    verbose: true       If true, Info and Warning messages will be printed to the console (loginfo() and logwarn() )
+    rate: 10            Rate (Hz) with which the loop() function will be run. May exclude this parameter if your node does not call self.start_loop().
+    ```
+3. Copy "launch/example_nodes.launch"  to  "launch/new_node.launch".  
+    Edit, modifying the arguments to **generic_node.launch** so it points to the new boostrapping script and config file.  
+    See "launch/generic_node.launch" for all available arguments.
+    
+After rebuilding the Catkin workspace, the node can be launched using:
+```
+roslaunch your_pkg new_node.launch
+```
 
