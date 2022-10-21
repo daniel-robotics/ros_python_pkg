@@ -108,11 +108,13 @@ Step-by-step:
     - `__init__`: Initialize the superclass using `super().__init__`. Perform other init tasks, then run one of the following:  
         - `self.start_loop()`: Calls `self.loop()` at the rate specified by the `rate` parameter until ROS shuts down.
         - `self.start_spin()`: Idles until ROS shuts down. Event callbacks (such as subscriber callbacks) still run.
-    - `init_publishers`: Called by `super().__init__`. Create and store any rospy.Publisher objects here.  
-    - `init_subscribers`: Called by `super().__init__`. Create and store any rospy.Subscriber objects here.  
+    - `init_publishers`: Called by `super().__init__`. Create all `rospy.Publisher` objects here.  
+    - `init_subscribers`: Called by `super().__init__`. Create all `rospy.Subscriber` objects here.  
     - `loop`: Called by `self.start_loop()` at the rate specified by the `rate` parameter until ROS shuts down. Does nothing on `self.start_spin()`.  
     - `on_reload`: Called whenever the parameters have been reloaded from the ROS parameter server.  
     - `on_close`: Called when ROS is shutting down.  
+
+`BaseNode` provides functions to do many common things (like logging). See `base_node.py` for details.  
 
 During initialization, the `BaseNode` class loads parameters from the ROS parameter server (rosparam) into a Python namespace `self.params`. Your code can access any of these parameters using `val = self.params['key']`. Parameter keys and values are set using a config file; see below.  
 
